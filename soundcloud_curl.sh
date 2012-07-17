@@ -37,6 +37,6 @@ do
 	title=`echo "$titles" | sed -n "$songid"p`
 	echo "[-] Downloading $title..."
 	url=`echo "$songs" | sed -n "$songid"p`
-	curl -s -L --user-agent 'Mozilla/5.0' -o "$title.mp3" $url;
+	curl -C - -s -L --user-agent 'Mozilla/5.0' -o "$title.mp3" $url;
 done
 done
