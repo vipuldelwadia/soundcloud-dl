@@ -1,8 +1,8 @@
-# Souncloud music downloader v3.1
+# Souncloud music downloader v3.2
 
-Readme date: Nov 1 2011
-Contributors: lukapusic
-URI: http://360percents.com/posts/soundcloud-com-music-downloader-linux-and-mac/
+Readme date: Jul 17 2012  
+Contributors: lukapusic ivanov  
+URI: http://360percents.com/posts/soundcloud-com-music-downloader-linux-and-mac/  
 Github: https://github.com/lukapusic/soundcloud-dl
 
 ## Description
@@ -18,11 +18,17 @@ Supports multiple pages.
 * usage: ```soundcloud.sh [DJ-URL]```
 
 ## Changelog
+
 ###v3.0
 * won't fail if the artists landing page isn't tracks (removed in v3.1)
 * supports multiple page downloading
+
 ###v3.1
 * now supports downloading of private songs
+
+###v3.2
+* properly handle more than 10 pages
+* resumes partial downloads, so you don't re-download already downloaded files
 
 ## Known issues
 * will fail if the artists landing page isn't tracks again, but on purpose

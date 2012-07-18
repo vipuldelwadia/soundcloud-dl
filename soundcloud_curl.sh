@@ -8,7 +8,7 @@ if [ -z "$1" ]; then
 	echo "";echo "[i] Usage: `basename $0` http://soundcloud.com/link_with_tracks_on_page";echo "";exit
 fi
 
-pages=`curl -s --user-agent 'Mozilla/5.0' "$1" | tr '"' "\n" | grep "tracks?page=" | sort -u | tail -n 1 | cut -d "=" -f 2`
+pages=`curl -s --user-agent 'Mozilla/5.0' "$1" | tr '"' "\n" | grep "tracks?page=" | cut -d "=" -f 2 | sort -nu | tail -n 1`
 
 if [ -z "$pages" ]; then
 	pages=1
@@ -37,6 +37,6 @@ do
 	title=`echo "$titles" | sed -n "$songid"p`
 	echo "[-] Downloading $title..."
 	url=`echo "$songs" | sed -n "$songid"p`
-	curl -s -L --user-agent 'Mozilla/5.0' -o "$title.mp3" $url;
+	curl -C - -s -L --user-agent 'Mozilla/5.0' -o "$title.mp3" $url;
 done
 done
