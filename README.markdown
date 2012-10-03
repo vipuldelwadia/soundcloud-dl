@@ -19,6 +19,9 @@ OS X users and other that don't have wget installed should use curl version.
 
 ## Changelog
 
+###Dec 16, 2010
+* Initial version released on [360percents.com](http://360percents.com/posts/soundcloud-com-music-downloader-linux-and-mac/).
+
 ###May 15, 2011
 * supports multiple page downloading
 
@@ -37,7 +40,7 @@ OS X users and other that don't have wget installed should use curl version.
 * Merge the wget and curl version of the script and make it more user friendly.
 
 ## Known issues
-* will fail if the artists landing page isn't tracks again, but on purpose
+* will fail if the artists landing page isn't tracks
 
 ## License
 [CC-BY-NC](https://creativecommons.org/licenses/by-nc/2.0/), [Luka Pusic](http://pusic.si)
