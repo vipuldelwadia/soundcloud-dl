@@ -1,7 +1,6 @@
 # Souncloud music downloader v3.2
 
-Readme date: Jul 17 2012  
-Contributors: lukapusic ivanov  
+Contributors: @lukapusic, @ivanov  
 URI: http://360percents.com/posts/soundcloud-com-music-downloader-linux-and-mac/  
 Github: https://github.com/lukapusic/soundcloud-dl
 
@@ -29,6 +28,9 @@ Supports multiple pages.
 ###v3.2
 * properly handle more than 10 pages
 * resumes partial downloads, so you don't re-download already downloaded files
+
+###Oct 10 2012
+* applied http://pastebin.com/ZG5JD1Em patch to fix page number issues
 
 ## Known issues
 * will fail if the artists landing page isn't tracks again, but on purpose
