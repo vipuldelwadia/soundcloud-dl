@@ -1,4 +1,4 @@
-# Souncloud music downloader v3.2
+# Souncloud music downloader
 
 Contributors: [lukapusic](https://github.com/lukapusic), [ivanov](https://github.com/ivanov), [elboulangero](https://github.com/elboulangero)  
 URI: http://360percents.com/posts/soundcloud-com-music-downloader-linux-and-mac/  
