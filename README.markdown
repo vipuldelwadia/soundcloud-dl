@@ -1,12 +1,13 @@
 # Souncloud music downloader v3.2
 
-Contributors: lukapusic <luka@pusic.si>, ivanov, elboulangero <elboulangero@gmail.com>  
+Contributors: [lukapusic](https://github.com/lukapusic), [ivanov](https://github.com/ivanov), [elboulangero](https://github.com/elboulangero)  
 URI: http://360percents.com/posts/soundcloud-com-music-downloader-linux-and-mac/  
 Github: https://github.com/lukapusic/soundcloud-dl
 
 ## Description
-Shell script to download music from http://www.soundcloud.com.
-Supports multiple pages.
+This shell script is able to download music from http://www.soundcloud.com.
+It downloads music from all relevant artist pages and it has been tested on iOS, OS X, Linux.
+OS X users and other that don't have wget installed should use curl version.
 
 ## System requirements
 * Unix like OS
@@ -31,10 +32,12 @@ Supports multiple pages.
 ###Oct 10, 2012
 * applied http://pastebin.com/ZG5JD1Em patch to fix page number issues
 
+##TODO
+* Check if user has curl or wget installed and use the right one.
+* Merge the wget and curl version of the script and make it more user friendly.
+
 ## Known issues
 * will fail if the artists landing page isn't tracks again, but on purpose
 
 ## License
-* ----------------------------------------------------------------------------
-* CC-BY-NC, Luka Pusic
-* ----------------------------------------------------------------------------
+[CC-BY-NC](https://creativecommons.org/licenses/by-nc/2.0/), [Luka Pusic](http://pusic.si)
