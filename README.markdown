@@ -1,6 +1,6 @@
 # Souncloud music downloader v3.2
 
-Contributors: @lukapusic, @ivanov  
+Contributors: lukapusic <luka@pusic.si>, ivanov, elboulangero <elboulangero@gmail.com>  
 URI: http://360percents.com/posts/soundcloud-com-music-downloader-linux-and-mac/  
 Github: https://github.com/lukapusic/soundcloud-dl
 
@@ -37,8 +37,5 @@ Supports multiple pages.
 
 ## License
 * ----------------------------------------------------------------------------
-* "THE BEER-WARE LICENSE" (Revision 42):
-* <pusic93@gmail.com> wrote this file. As long as you retain this notice you
-* can do whatever you want with this stuff. If we meet some day, and you think
-* this stuff is worth it, you can buy me a beer in return. Luka Pusic
+* CC-BY-NC, Luka Pusic
 * ----------------------------------------------------------------------------
