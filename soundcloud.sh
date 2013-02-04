@@ -1,6 +1,7 @@
 #!/bin/bash
-#soundcloud music downloader by http://360percents.com - v3.0 on Nov 1st 2011
-#Author: Luka Pusic <pusic93@gmail.com>
+#soundcloud music downloader by http://360percents.com
+#hosted on https://github.com/lukapusic/soundcloud-dl/
+#Author: Luka Pusic <luka@pusic.si>
 
 echo "[i] soundcloud.com music downloader by http://360percents.com (wget version)";
 
