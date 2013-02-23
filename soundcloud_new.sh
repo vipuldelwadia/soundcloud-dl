@@ -9,6 +9,8 @@ if [ -z "$1" ]; then
 	echo "";echo "[i] Usage: `basename $0` http://soundcloud.com/link_with_tracks_on_page";echo "";exit
 fi
 
+command -v curl &>/dev/null || { echo "[!] Curl needs to be installed."; exit 1; }
+
 echo "[i] Grabbing artists page"
 page=$(curl -L -s --user-agent 'Mozilla/5.0' $1)
 clientID="b45b1aa10f1ac2941910a7f0d10f8e28" #$(echo "$page" | grep "clientID" | tr "," "\n" | grep "clientID" | cut -d '"' -f 4)
