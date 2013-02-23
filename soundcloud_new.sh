@@ -30,8 +30,9 @@ for (( i=1; i <= $songcount; i++ ))
 do
 	title=$(echo "$songs" | sed -n "$i"p | tr ">" "\n" | grep "</title" | cut -d "<" -f 1)
 	echo "[-] Downloading $title..."
+	filename=$(echo "$title".mp3 | tr '/' '\\')
 	songID=$(echo "$songs" | sed -n "$i"p | tr " " "\n" | grep "</id>" | head -n 1 | cut -d ">" -f 2 | cut -d "<" -f 1)
 	#echo "Song id is $songID"
 	url=$(curl -s -L --user-agent 'Mozilla/5.0' "https://api.sndcdn.com/i1/tracks/$songID/streams?client_id=$clientID" | cut -d '"' -f 4 | sed 's/\\u0026/\&/g')
-	curl -L --user-agent 'Mozilla/5.0' -o "$title.mp3" "$url";
+	curl -L --user-agent 'Mozilla/5.0' -o "$filename" "$url";
 done
