@@ -18,26 +18,42 @@ function countpages() { # I/ $1 : Content of the page to check, O/ Total number 
 
 function downsong() { # I/ $1 : URL of the song
     url="$1"
-    page=$(curl -L -# --user-agent 'Mozilla/5.0' "$url")
+    if $curlinstalled; then
+        page=$(curl -L -# --user-agent 'Mozilla/5.0' "$url")
+    else
+        page=$(wget --max-redirect=1000 --trust-server-names --progress=bar -U -O- 'Mozilla/5.0' "$url")
+    fi
     id=$(echo "$page" | grep -v "small" | grep -oE "data-sc-track=.[0-9]*" | grep -oE "[0-9]*" | sort | uniq)
     title=$(echo "$page" | grep -A1 "<em itemprop=\"name\">" | tail -n1 | sed 's/\\u0026/\&/g' | recode html..ascii)
     artist=$(echo "$page" | grep byArtist | sed 's/.*itemprop="name">\([^<]*\)<.*/\1/g')
     echo "      [-] Downloading \"$title\" by $artist"
     filename=$(echo "$artist - $title".mp3 | tr '/' '\\')
     songurl=$(curl -s -L --user-agent 'Mozilla/5.0' "https://api.sndcdn.com/i1/tracks/$id/streams?client_id=$clientID" | cut -d '"' -f 4 | sed 's/\\u0026/\&/g')
-    curl -f -C - -# -L --user-agent 'Mozilla/5.0' -o "$filename" "$songurl"
+    if $curlinstalled; then
+        curl -f -C - -# -L --user-agent 'Mozilla/5.0' -o "$filename" "$songurl"
+    else
+        wget -c --progress=bar --max-redirect=1000 --trust-server-names -U -O- 'Mozilla/5.0' -o "$filename" "$songurl" 2>&1
+    fi
 }
 
 function downallsongs() { # I/ $1 : URL of the songs
     allsongsurl="$1"
     echo "   [i] Grabbing user songs page"
-    allsongspage=$(curl -L -# --user-agent 'Mozilla/5.0' "$allsongsurl")
+    if $curlinstalled; then
+        allsongspage=$(curl -L -# --user-agent 'Mozilla/5.0' "$allsongsurl")
+    else
+        allsongspage=$(wget --max-redirect=1000 --trust-server-names --progress=bar -U -O- 'Mozilla/5.0' "$allsongsurl")
+    fi
     allsongsnumpages=$(countpages "$allsongspage")
     echo "   [i] $allsongsnumpages user songs pages found"
     for (( allsongsnumcurpage=1; allsongsnumcurpage <= $allsongsnumpages; allsongsnumcurpage++ )) ; do
         if [ "$allsongsnumcurpage" != "1" ]; then
             echo "   [i] Grabbing user songs page $allsongsnumcurpage"
-            allsongspage=`curl -L -# --user-agent 'Mozilla/5.0' "$allsongsurl?page=$allsongsnumcurpage"`;
+            if $curlinstalled; then
+                allsongspage=`curl -L -# --user-agent 'Mozilla/5.0' "$allsongsurl?page=$allsongsnumcurpage"`;
+            else
+                allsongspage=`wget --max-redirect=1000 --trust-server-names --progress=bar -U -O- 'Mozilla/5.0' "$allsongsurl?page=$allsongsnumcurpage"`;
+            fi
         fi
 
         allsongsid=$(echo "$allsongspage" |  grep -oE "data-sc-track=.[0-9]*" | grep -oE "[0-9]*" | sort | uniq)
@@ -57,15 +73,27 @@ function downallsongs() { # I/ $1 : URL of the songs
             cursongartist=$(echo "$allsongspage" | grep -A6 player.*data-sc-track=\"$cursongid\" | grep "byArtist" | sed 's/.*>\([^<]*\)<\/a>.*/\1/g')
             echo "      [-] Downloading \"$cursongtitle\" by $cursongartist"
             cursongfilename=$(echo "$cursongartist - $cursongtitle".mp3 | tr '/' '\\')
-            cursongurl=$(curl -s -L --user-agent 'Mozilla/5.0' "https://api.sndcdn.com/i1/tracks/$cursongid/streams?client_id=$clientID" | cut -d '"' -f 4 | sed 's/\\u0026/\&/g')
-            curl -f -C - -# -L --user-agent 'Mozilla/5.0' -o "$cursongfilename" "$cursongurl"
+            if $curlinstalled; then
+                cursongurl=$(curl -s -L --user-agent 'Mozilla/5.0' "https://api.sndcdn.com/i1/tracks/$cursongid/streams?client_id=$clientID" | cut -d '"' -f 4 | sed 's/\\u0026/\&/g')
+            else
+                cursongurl=$(wget -q --max-redirect=1000 --trust-server-names -U -O- 'Mozilla/5.0' "https://api.sndcdn.com/i1/tracks/$cursongid/streams?client_id=$clientID" | cut -d '"' -f 4 | sed 's/\\u0026/\&/g')
+            fi
+            if $curlinstalled; then
+                curl -f -C - -# -L --user-agent 'Mozilla/5.0' -o "$cursongfilename" "$cursongurl"
+            else
+                wget -c --progress=bar --max-redirect=1000 --trust-server-names -U 'Mozilla/5.0' -o "$cursongfilename" "$cursongurl" 2>&1
+            fi
         done
     done
 }
 
 function downset() { # I/ $1 : URL of the set
     url="$1"
-    page=$(curl -L -# --user-agent 'Mozilla/5.0' "$url")
+    if $curlinstalled; then
+        page=$(curl -L -# --user-agent 'Mozilla/5.0' "$url")
+    else
+        page=$(wget --max-redirect=1000 --trust-server-names --progress=bar -U -O- 'Mozilla/5.0' "$url")
+    fi
     settitle=$(echo "$page" | grep -A1 "<em itemprop=\"name\">" | tail -n1 | recode html..ascii)
     songs=$(echo "$page" | grep -oE "data-sc-track=.[0-9]*" | grep -oE "[0-9]*" | sort | uniq)
     echo "      [i] Found set \"$settitle\""
@@ -88,21 +116,38 @@ function downset() { # I/ $1 : URL of the set
         artist=$(echo "$page" | grep -A3 $id | grep byArtist | cut -d"\"" -f2)
         echo "         [-] Downloading \"$title\" by $artist ($numcursong/$songcount)"
         filename=$(echo "$artist - $title".mp3 | tr '/' '\\')
-        songurl=$(curl -s -L --user-agent 'Mozilla/5.0' "https://api.sndcdn.com/i1/tracks/$id/streams?client_id=$clientID" | cut -d '"' -f 4 | sed 's/\\u0026/\&/g')
-        curl -f -C - -# -L --user-agent 'Mozilla/5.0' -o "$filename" "$songurl"
+        
+        if $curlinstalled; then
+            songurl=$(curl -s -L --user-agent 'Mozilla/5.0' "https://api.sndcdn.com/i1/tracks/$id/streams?client_id=$clientID" | cut -d '"' -f 4 | sed 's/\\u0026/\&/g')
+        else
+            songurl=$(wget -q --max-redirect=1000 --trust-server-names -U -O- 'Mozilla/5.0' "https://api.sndcdn.com/i1/tracks/$id/streams?client_id=$clientID" | cut -d '"' -f 4 | sed 's/\\u0026/\&/g')
+        fi
+        if $curlinstalled; then
+            curl -f -C - -# -L --user-agent 'Mozilla/5.0' -o "$filename" "$songurl"
+        else
+            wget -c --progress=bar --max-redirect=1000 --trust-server-names -U 'Mozilla/5.0' -o "$filename" "$songurl" 2>&1
+        fi
     done
 }
 
 function downallsets() { # I/ $1 : URL of the sets
     allsetsurl="$1"
     echo "   [i] Grabbing user sets page"
-    allsetspage=$(curl -L -# --user-agent 'Mozilla/5.0' "$allsetsurl")
+    if $curlinstalled; then
+        allsetspage=$(curl -L -# --user-agent 'Mozilla/5.0' "$allsetsurl")
+    else
+        allsetspage=$(wget --max-redirect=1000 --trust-server-names --progress=bar -U -O- 'Mozilla/5.0' "$allsetsurl")
+    fi
     allsetsnumpages=$(countpages "$allsetspage")
     echo "   [i] $allsetsnumpages user sets pages found"
     for (( allsetsnumcurpage=1; allsetsnumcurpage <= $allsetsnumpages; allsetsnumcurpage++ )) ; do
         if [ "$allsetsnumcurpage" != "1" ]; then
             echo "   [i] Grabbing user sets page $allsetsnumcurpage"
-            allsetspage=$(curl -L -# --user-agent 'Mozilla/5.0' "$allsetsurl?page=$allsetsnumcurpage")
+            if $curlinstalled; then
+                allsetspage=$(curl -L -# --user-agent 'Mozilla/5.0' "$allsetsurl?page=$allsetsnumcurpage")
+            else
+                allsetspage=$(wget --max-redirect=1000 --trust-server-names --progress=bar -U -O- 'Mozilla/5.0' "$allsetsurl?page=$allsetsnumcurpage")
+            fi
         fi
 
         allsetssets=$(echo "$allsetspage" | grep -A1 "li class=\"set\"" | grep "<h3>" | sed 's/.*href="\([^"]*\)">.*/\1/g')
@@ -142,7 +187,18 @@ if [ -z "$1" ] || [ "$1" == "-h" ] || [ "$1" == "--help" ] ; then
     exit 1
 fi
 
-command -v curl &>/dev/null || { echo "[!] Curl needs to be installed."; exit 1; }
+# curlinstalled=`command -V curl &>/dev/null`
+curlinstalled=false
+wgetinstalled=`command -V wget &>/dev/null`
+
+if $curlinstalled; then
+  echo "[i] Using" `curl -V` | cut -c-21
+elif $wgetinstalled; then
+  echo "[i] Using" `wget -V` | cut -c-24
+else
+  echo "[!] cURL or Wget need to be installed."; exit 1;
+fi
+
 command -v recode &>/dev/null || { echo "[!] Recode needs to be installed."; exit 1; }
 
 url=$(echo "$1" | sed 's-.*soundcloud.com/-http://soundcloud.com/-' | cut -d "?" -f 1)
