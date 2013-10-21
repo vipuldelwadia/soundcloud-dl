@@ -51,13 +51,13 @@ do
 	songID=$(echo "$songs" | sed -n "$i"p | tr " " "\n" | grep "</id>" | head -n 1 | cut -d ">" -f 2 | cut -d "<" -f 1)
 	#echo "Song id is $songID"
 	if $curlinstalled; then
-    url=$(curl -s -L --user-agent 'Mozilla/5.0' "https://api.sndcdn.com/i1/tracks/$songID/streams?client_id=$clientID" | cut -d '"' -f 4 | sed 's/\\u0026/\&/g')
-  else
-    url=$(wget -q --max-redirect=1000 --trust-server-names -O- -U 'Mozilla/5.0' "https://api.sndcdn.com/i1/tracks/$songID/streams?client_id=$clientID" | cut -d '"' -f 4 | sed 's/\\u0026/\&/g')
-  fi
-  if $curlinstalled; then
-  	curl -L --user-agent 'Mozilla/5.0' -o "$filename" "$url";
-  else
-    wget --max-redirect=1000 --trust-server-names -U 'Mozilla/5.0' -O "$filename" "$url";
-  fi
+		url=$(curl -s -L --user-agent 'Mozilla/5.0' "https://api.sndcdn.com/i1/tracks/$songID/streams?client_id=$clientID" | cut -d '"' -f 4 | sed 's/\\u0026/\&/g')
+	else
+		url=$(wget -q --max-redirect=1000 --trust-server-names -O- -U 'Mozilla/5.0' "https://api.sndcdn.com/i1/tracks/$songID/streams?client_id=$clientID" | cut -d '"' -f 4 | sed 's/\\u0026/\&/g')
+	fi
+	if $curlinstalled; then
+		curl -C - -L --user-agent 'Mozilla/5.0' -o "$filename" "$url";
+	else
+		wget -c --max-redirect=1000 --trust-server-names -U 'Mozilla/5.0' -O "$filename" "$url";
+	fi
 done
