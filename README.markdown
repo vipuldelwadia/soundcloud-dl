@@ -15,7 +15,6 @@ It should work with iOS, OS X, Linux.
 ##TODO
 * clean the project, remove old scripts and keep one working instance
 * improve instructions and README
-* Add -C - command to curl to continue partially downloaded files. Same for wget.
 
 ## License
 [GPL v2](https://www.gnu.org/licenses/gpl-2.0.txt), author [Luka Pusic](http://pusic.si)
