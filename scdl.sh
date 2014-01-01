@@ -5,7 +5,7 @@ echo ''
 echo ' *----------------------------------------------------------------------------*'
 echo '|      SoundcloudMusicDownloader(cURL/Wget version) |    FlyinGrub rework      |'
 echo ' *----------------------------------------------------------------------------*'
-#cd /media/dd/Music
+
 
 function settags() {
     artist=$1
@@ -30,11 +30,12 @@ function downsong() { #Done!
         page=$(wget --max-redirect=1000 --trust-server-names --progress=bar -U -O- 'Mozilla/5.0' "$url")
     fi
     id=$(echo "$page" | grep -v "small" | grep -oE "data-sc-track=.[0-9]*" | grep -oE "[0-9]*" | sort | uniq)
- 	title=$(echo -e "$page" | grep -A1 "<em itemprop=\"name\">" | tail -n1 | sed 's/\\u0026/\&/g')
+ 	title=$(echo -e "$page" | grep -A1 "<em itemprop=\"name\">" | tail -n1 | sed 's/\\u0026/\&/g' | recode html..u8)
 	filename=$(echo "$title".mp3 | tr '*/\?"<>|' '+       ' )
     songurl=$(curl -s -L --user-agent 'Mozilla/5.0' "https://api.sndcdn.com/i1/tracks/$id/streams?client_id=$clientID" | cut -d '"' -f 4 | sed 's/\\u0026/\&/g')
 	artist=$(echo "$page" | grep byArtist | sed 's/.*itemprop="name">\([^<]*\)<.*/\1/g')
     # DL
+	echo ""
 	if [ -e "$filename" ]; then
 		echo "[!] The song $filename has already been downloaded..."  && exit
 	else
@@ -62,9 +63,9 @@ function downallsongs() { #Done!
 	artistID=$(echo "$page" | tr "," "\n" | grep "trackOwnerId" | head -n 1 | cut -d ":" -f 2) 
 	echo "[i] Grabbing all song info"
 	if $curlinstalled; then
-		songs=$(curl -s -L --user-agent 'Mozilla/5.0' "https://api.sndcdn.com/e1/users/$artistID/sounds?limit=256&offset=0&linked_partitioning=1&client_id=$clientID" | recode html..utf-8 | tr -d "\n" | sed 's/<stream-item>/\n/g' | sed '1d')
+		songs=$(curl -s -L --user-agent 'Mozilla/5.0' "https://api.sndcdn.com/e1/users/$artistID/sounds?limit=256&offset=0&linked_partitioning=1&client_id=$clientID" | tr -d "\n" | sed 's/<stream-item>/\n/g' | sed '1d' )
 	else 
-		songs=$(wget -q --max-redirect=1000 --trust-server-names -O- -U 'Mozilla/5.0' "https://api.sndcdn.com/e1/users/$artistID/sounds?limit=256&offset=0&linked_partitioning=1&client_id=$clientID" | recode html..utf-8 | tr -d "\n" | sed 's/<stream-item>/\n/g' | sed '1d')
+		songs=$(wget -q --max-redirect=1000 --trust-server-names -O- -U 'Mozilla/5.0' "https://api.sndcdn.com/e1/users/$artistID/sounds?limit=256&offset=0&linked_partitioning=1&client_id=$clientID" | tr -d "\n" | sed 's/<stream-item>/\n/g' | sed '1d')
 	fi
 	songcount=$(echo "$songs" | wc -l)
 	echo "[i] Found $songcount songs! (200 is max)"
@@ -75,7 +76,7 @@ function downallsongs() { #Done!
 	echo ""
 	for (( i=1; i <= $songcount; i++ ))
 	do	
-		title=$(echo -e "$songs" | sed -n "$i"p | tr ">" "\n" | grep "</title" | cut -d "<" -f 1)
+		title=$(echo -e "$songs" | sed -n "$i"p | tr ">" "\n" | grep "</title" | cut -d "<" -f 1 | recode html..u8)
 		filename=$(echo "$title".mp3 | tr '*/\?"<>|' '+       ' )
 		artist=$(echo "$songs" | sed -n "$i"p | tr ">" "\n" | grep "</username" | cut -d "<" -f 1)
 		if [ -e "$filename" ]; then
@@ -120,15 +121,16 @@ function downset() {  #done!
     songcount=$(echo "$songs" | wc -l)
     echo "[i] Found $songcount songs"
 	# DL
+	echo ""
     for (( numcursong=1; numcursong <= $songcount; numcursong++ ))
     do
         id=$(echo "$songs" | sed -n "$numcursong"p)
-        title=$(echo -e "$page" | grep data-sc-track | grep $id | grep -oE 'rel=.nofollow.>[^<]*' | sed 's/rel="nofollow">//' | sed 's/\\u0026/\&/g')
+        title=$(echo -e "$page" | grep data-sc-track | grep $id | grep -oE 'rel=.nofollow.>[^<]*' | sed 's/rel="nofollow">//' | sed 's/\\u0026/\&/g' | recode html..u8)
         if [[ "$title" == "Play" ]] ; then
-            title=$(echo -e "$page" | grep $id | grep id | grep -oE "\"title\":\"[^\"]*" | sed 's/"title":"//' | sed 's/\\u0026/\&/g' )
+            title=$(echo -e "$page" | grep $id | grep id | grep -oE "\"title\":\"[^\"]*" | sed 's/"title":"//' | sed 's/\\u0026/\&/g' | recode html..u8)
         fi
 		artist=$(echo "$page" | grep -A3 $id | grep byArtist | cut -d"\"" -f2)
-		filename=$(echo "$title".mp3 | tr '*/\?"<>|' '+       ' )
+		filename=$(echo "$title".mp3 | tr '*/\?"<>|' '+       ' )		
         		if [ -e "$filename" ]; then
 			echo "[!] The song $filename has already been downloaded..."  && exit
 		else
