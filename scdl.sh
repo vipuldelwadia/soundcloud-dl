@@ -6,7 +6,6 @@ echo ' *------------------------------------------------------------------------
 echo '|      SoundcloudMusicDownloader(cURL/Wget version) |    FlyinGrub rework      |'
 echo ' *----------------------------------------------------------------------------*'
 
-
 function settags() {
     artist=$1
     title=$2
