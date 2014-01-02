@@ -1,5 +1,6 @@
 #!/bin/bash
 #Author:  FlyinGrub 
+#check my github : https://github.com/flyingrub/soundcloud-dl
 
 echo ''
 echo ' *----------------------------------------------------------------------------*'
