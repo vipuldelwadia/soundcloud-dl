@@ -33,7 +33,7 @@ It should work with iOS, OS X, Linux.
 * improve instructions and README --> Done !
 
 ## More information
-The script cannot handle letters like û cause to recode. But if i remove it instead of & you will have &amp; (the html code of &) and as i think there is more & than û i prefer to let it...
+The script cannot handle letters like ````û```` cause to recode. But if i remove it instead of ````&```` you will have ````&amp;```` (the html code of &) and as i think there is more ````&```` than ````û```` i prefer to let it...
 
 ## License
 [GPL v2](https://www.gnu.org/licenses/gpl-2.0.txt), orignal author [Luka Pusic](http://pusic.si)
