@@ -29,8 +29,8 @@ It should work with iOS, OS X, Linux.
 * You can use it as a sync script as i do with my Raspberry PI, each night it launch the script with my users profile and if new song as been added it download them and stop when it encounter a song that is already downloaded ;).
 
 ##TODO
-* clean the project, remove old scripts and keep one working instance  -- > Done !
-* improve instructions and README --> Done !
+[*] clean the project, remove old scripts and keep one working instance
+[*] improve instructions and README
 
 ## More information
 The script cannot handle letters like ````û```` cause to recode. But if i remove it instead of ````&```` you will have ````&amp;```` (the html code of &) and as i think there is more ````&```` than ````û```` i prefer to let it...
