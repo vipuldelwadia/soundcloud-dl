@@ -37,7 +37,7 @@ Features
 Changelog
 --------------
 18/01/2014 :
-* Replacde id3v2 with eyeD3 wich support image tag
+* Replaced id3v2 with eyeD3 wich support image tag
 * Added image & genre tags support for each type 
 * Added support of playlist in an users page !
 
