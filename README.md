@@ -8,7 +8,7 @@ It should work with iOS, OS X, Linux.
 
 System requirements
 --------------
-* nix like OS with a proper shell
+* Unix like OS with a proper shell
 * URL (Highly recommended) or wget
 * ools wich are preinstalled on linux (I don't know  for OS X) : `recode` ; `sed` ; `tail` ; `tr` ; `echo` ; `grep` ; `head` ; `cut` ; `sort` ; `uniq` .
 
