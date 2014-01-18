@@ -10,7 +10,7 @@ System requirements
 --------------
 * Unix like OS with a proper shell
 * URL (Highly recommended) or wget
-* ools wich are preinstalled on linux (I don't know  for OS X) : `recode` ; `sed` ; `tail` ; `tr` ; `echo` ; `grep` ; `head` ; `cut` ; `sort` ; `uniq` .
+* Tools wich are preinstalled on linux (I don't know  for OS X) : `recode` ; `sed` ; `tail` ; `tr` ; `echo` ; `grep` ; `head` ; `cut` ; `sort` ; `uniq` .
 
 
 Install instruction for linux and required tools
@@ -21,8 +21,8 @@ Install instruction for linux and required tools
 
 Instructions
 --------------
-* apply executable permissions `chmod +x ./scdl.sh`
-* usage: `scdl.sh [TRACK(S) URL]` or `scdl.sh [USER URL]` or `scdl.sh [SET(S)URL]`
+* Apply executable permissions `chmod +x ./scdl.sh`
+* Usage: `scdl.sh [TRACK(S) URL]` or `scdl.sh [USER URL]` or `scdl.sh [SET(S)URL]`
 
 Features
 --------------
