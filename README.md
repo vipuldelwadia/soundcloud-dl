@@ -16,13 +16,13 @@ System requirements
 Install instruction for linux and required tools
 --------------
 * Update the package list : `sudo apt-get update`
-* Install id3v2 `sudo apt-get install id3v2`
+* Install eyeD3 `sudo apt-get install eyeD3`
 * Install cURL `sudo apt-get install curl`
 
 Instructions
 --------------
 * apply executable permissions `chmod +x ./scdl.sh`
-* usage: `scdl.sh [TRACK(S) URL]` or `soundcloud_new.sh [USER URL]` or `soundcloud_new.sh [SET(S)URL]`
+* usage: `scdl.sh [TRACK(S) URL]` or `scdl.sh [USER URL]` or `scdl.sh [SET(S)URL]`
 
 Features
 --------------
@@ -30,18 +30,20 @@ Features
 * Download all song of one song page
 * Download all song of one user's playlist page
 * Download all song of one user's list of playlist page
-* Set tags with id3v2 (skip the tag if id3v2 is not installed
+* Set tags with eyeD3 (skip the tag if eyeD3 is not installed)
 * The script stop when he see one song that have already been downloaded
 * You can use it as a sync script as i do with my Raspberry PI, each night it launch the script with my users profile and if new song as been added it download them and stop when it encounter a song that is already downloaded ;).
 
-TODO
+Changelog
 --------------
-- [x] ~~Clean the project, remove old scripts and keep one working instance~~
-- [x] ~~Improve instructions and README~~
+18/01/2014 :
+* Replacde id3v2 with eyeD3 wich support image tag
+* Added image & genre tags support for each type 
+* Added support of playlist in an users page !
 
 More information
 --------------
-The script cannot handle letters like `û` cause to recode. But if i remove it instead of `&` you will have `&amp;` (the html code of `&`) and as i think there is more `&` than `û` i prefer to let it...
+The script cannot handle letters like `û` cause to recode. But if i remove it, instead of `&` you will have `&amp;` (the html code of `&`) and as i think there is more `&` than `û` i prefer to let it...
 
 License
 --------------
