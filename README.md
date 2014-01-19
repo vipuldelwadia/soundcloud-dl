@@ -13,7 +13,7 @@ System requirements
 * Tools wich are preinstalled on linux (I don't know  for OS X) : `recode` ; `sed` ; `tail` ; `tr` ; `echo` ; `grep` ; `head` ; `cut` ; `sort` ; `uniq` .
 
 
-Install instruction for linux and required tools
+Required tools
 --------------
 * Update the package list : `sudo apt-get update`
 * Install eyeD3 `sudo apt-get install eyeD3`
@@ -21,6 +21,9 @@ Install instruction for linux and required tools
 
 Instructions
 --------------
+* Clic "Donwload as zip" (at the right)
+* Unzip
+* Place scdl.sh where you want to download the music or add a `cd /placewhereyouwanttodownloadmusic` at the begining of the script
 * Apply executable permissions `chmod +x ./scdl.sh`
 * Usage: `scdl.sh [TRACK(S) URL]` or `scdl.sh [USER URL]` or `scdl.sh [SET(S)URL]`
 
