@@ -2,13 +2,7 @@
 # Author: FlyinGrub
 # Check my github : https://github.com/flyingrub/soundcloud-dl
 # Share it if you like ;)
-# * ----------------------------------------------------------------------------
-# * "THE BEER-WARE LICENSE" (Revision 42):
-# * <flyinggrub@gmail.com> wrote this file. As long as you retain this notice you
-# * can do whatever you want with this stuff. If we meet some day, and you think
-# * this stuff is worth it, you can buy me a beer in return.
-# * ----------------------------------------------------------------------------
-##############################################################
+################################################################
 
 echo ''
 echo ' *---------------------------------------------------------------------------*'
@@ -53,6 +47,7 @@ function downsong() { #Done!
     imageurl=$(echo "$page" | tr ">" "\n" | grep -A1 '<div class="artwork-download-link"' | cut -d '"' -f 2 | tr " " "\n" | grep 'http' | sed 's/original/t500x500/g' | sed 's/png/jpg/g' )
     genre=$(echo "$page" | tr ">" "\n" | grep -A1 '<span class="genre search-deprecation-notification" data="/tags/' | tr ' ' "\n" | grep '</span' | cut -d "<" -f 1 | recode html..u8)
     # DL
+    
     echo ""
     if [ -e "$filename" ]; then
         echo "[!] The song $filename has already been downloaded..."  && exit
@@ -60,9 +55,9 @@ function downsong() { #Done!
         echo "[-] Downloading $title..."
     fi
     if $curlinstalled; then
-        curl -# -C  -L --user-agent 'Mozilla/5.0' -o "`echo -e "$filename"`" "$songurl";
+        curl -# -L --user-agent 'Mozilla/5.0' -o "`echo -e "$filename"`" "$songurl";
     else
-        wget -c --max-redirect=1000 --trust-server-names -U 'Mozilla/5.0' -O "`echo -e "$filename"`" "$songurl";
+        wget --max-redirect=1000 --trust-server-names -U 'Mozilla/5.0' -O "`echo -e "$filename"`" "$songurl";
     fi
     settags "$artist" "$title" "$filename" "$genre" "$imageurl"
     echo "[i] Downloading of $filename finished"
@@ -119,9 +114,9 @@ function downallsongs() {
                 songurl=$(wget -q --max-redirect=1000 --trust-server-names -O- -U 'Mozilla/5.0' "https://api.sndcdn.com/i1/tracks/$songID/streams?client_id=$clientID" | cut -d '"' -f 4 | sed 's/\\u0026/\&/g')
             fi
             if $curlinstalled; then
-                curl -# -C  -L --user-agent 'Mozilla/5.0' -o "`echo -e "$filename"`" "$songurl";
+                curl -# -L --user-agent 'Mozilla/5.0' -o "`echo -e "$filename"`" "$songurl";
             else
-                wget -c --max-redirect=1000 --trust-server-names -U 'Mozilla/5.0' -O "`echo -e "$filename"`" "$songurl";
+                wget --max-redirect=1000 --trust-server-names -U 'Mozilla/5.0' -O "`echo -e "$filename"`" "$songurl";
             fi
             settags "$artist" "$title" "$filename" "$genre" "$imageurl"
             echo "[i] Downloading of $filename finished"
@@ -181,9 +176,9 @@ function downset() {
             songurl=$(wget -q --max-redirect=1000 --trust-server-names -U -O- 'Mozilla/5.0' "https://api.sndcdn.com/i1/tracks/$id/streams?client_id=$clientID" | cut -d '"' -f 4 | sed 's/\\u0026/\&/g')
         fi
         if $curlinstalled; then
-            curl -# -C  -L --user-agent 'Mozilla/5.0' -o "`echo -e "$filename"`" "$songurl";
+            curl -# -L --user-agent 'Mozilla/5.0' -o "`echo -e "$filename"`" "$songurl";
         else
-            wget -c --max-redirect=1000 --trust-server-names -U 'Mozilla/5.0' -O "`echo -e "$filename"`" "$songurl";
+            wget --max-redirect=1000 --trust-server-names -U 'Mozilla/5.0' -O "`echo -e "$filename"`" "$songurl";
         fi
         settags "$artist" "$title" "$filename" "$genre" "$imageurl" "$album"
         echo "[i] Downloading of $filename finished"
