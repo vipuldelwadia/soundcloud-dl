@@ -25,7 +25,7 @@ Instructions
 * Unzip
 * Place scdl.sh where you want to download the music or add a `cd /placewhereyouwanttodownloadmusic` at the begining of the script
 * Apply executable permissions `chmod +x ./scdl.sh`
-* Usage: `scdl.sh [TRACK(S) URL]` or `scdl.sh [USER URL]` or `scdl.sh [SET(S)URL]`
+* Usage: `scdl.sh [TRACK(S) URL]` or `scdl.sh [USER URL]` or `scdl.sh [SET(S)URL]` 
 
 Features
 --------------
@@ -33,6 +33,7 @@ Features
 * Download all song of one song page
 * Download all song of one user's playlist page
 * Download all song of one user's list of playlist page
+* Download all song of one group page
 * Set tags with eyeD3 (skip the tag if eyeD3 is not installed)
 * The script stop when he see one song that have already been downloaded
 * You can use it as a sync script as i do with my Raspberry PI, each night it launch the script with my users profile and if new song as been added it download them and stop when it encounter a song that is already downloaded ;).
