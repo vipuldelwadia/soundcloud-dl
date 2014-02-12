@@ -105,11 +105,6 @@ function downallsongs() {
             genre=$(echo "$songs" | sed -n "$i"p | tr ">" "\n" | grep "</genre" | cut -d "<" -f 1 | recode html..u8)
             imageurl=$(echo "$songs" | sed -n "$i"p | tr ">" "\n" | grep "</artwork-url" | cut -d "<" -f 1 | sed 's/large/t500x500/g')
             songID=$(echo "$songs" | sed -n "$i"p | tr " " "\n" | grep "</id>" | head -n 1 | cut -d ">" -f 2 | cut -d "<" -f 1)
-            songDate=$(echo "$songs" | sed -n "$i"p | tr " " "\n" | grep "</created-at>" | head -n 1 | cut -d ">" -f 2 | cut -d "<" -f 1 | cut -d "T" -f 1) 
-            songYear=$(echo "$songDate" | cut -d "-" -f 1)
-            songMonth=$(echo "$songDate" | cut -d "-" -f 2)
-            songDay=$(echo "$songDate" | cut -d "-" -f 3)
-            exit
             # DL
             echo "[-] Downloading the song $title..."
             if $curlinstalled; then
