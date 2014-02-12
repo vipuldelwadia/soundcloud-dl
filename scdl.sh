@@ -105,6 +105,11 @@ function downallsongs() {
             genre=$(echo "$songs" | sed -n "$i"p | tr ">" "\n" | grep "</genre" | cut -d "<" -f 1 | recode html..u8)
             imageurl=$(echo "$songs" | sed -n "$i"p | tr ">" "\n" | grep "</artwork-url" | cut -d "<" -f 1 | sed 's/large/t500x500/g')
             songID=$(echo "$songs" | sed -n "$i"p | tr " " "\n" | grep "</id>" | head -n 1 | cut -d ">" -f 2 | cut -d "<" -f 1)
+            songDate=$(echo "$songs" | sed -n "$i"p | tr " " "\n" | grep "</created-at>" | head -n 1 | cut -d ">" -f 2 | cut -d "<" -f 1 | cut -d "T" -f 1) 
+            songYear=$(echo "$songDate" | cut -d "-" -f 1)
+            songMonth=$(echo "$songDate" | cut -d "-" -f 2)
+            songDay=$(echo "$songDate" | cut -d "-" -f 3)
+            exit
             # DL
             echo "[-] Downloading the song $title..."
             if $curlinstalled; then
@@ -217,33 +222,29 @@ function downallsets() {
     else
         allsetspage=$(wget --max-redirect=1000 --trust-server-names --progress=bar -U -O- 'Mozilla/5.0' "$allsetsurl")
     fi
-    allsetsnumpages=$(countpages "$allsetspage")
-    echo "[i] $allsetsnumpages user sets pages found"
-    for (( allsetsnumcurpage=1; allsetsnumcurpage <= $allsetsnumpages; allsetsnumcurpage++ )) ; do
-        if [ "$allsetsnumcurpage" != "1" ]; then
-            echo "   [i] Grabbing user sets page $allsetsnumcurpage"
-            if $curlinstalled; then
-                allsetspage=$(curl -L --user-agent 'Mozilla/5.0' "$allsetsurl?page=$allsetsnumcurpage")
-            else
-                allsetspage=$(wget --max-redirect=1000 --trust-server-names --progress=bar -U -O- 'Mozilla/5.0' "$allsetsurl?page=$allsetsnumcurpage")
-            fi
+    allsetsnumpages=$(echo "$allsetspage" | grep '<li class="set">' | wc -l)
+    echo "[i] $allsetsnumpages sets pages found"
+    for (( allsetsnumcurpage=1; allsetsnumcurpage <= $allsetsnumpages; allsetsnumcurpage++ ))
+    do
+        echo "   [i] Grabbing user sets page $allsetsnumcurpage"
+        if $curlinstalled; then
+            allsetspage=$(curl -L --user-agent 'Mozilla/5.0' "$allsetsurl?page=$allsetsnumcurpage")
+        else
+            allsetspage=$(wget --max-redirect=1000 --trust-server-names --progress=bar -U -O- 'Mozilla/5.0' "$allsetsurl?page=$allsetsnumcurpage")
         fi
-
         allsetssets=$(echo "$allsetspage" | grep -A1 "li class=\"set\"" | grep "<h3>" | sed 's/.*href="\([^"]*\)">.*/\1/g')
-
         if [ -z "$allsetssets" ]; then
             echo "[!] No sets found on user sets page $allsetsnumcurpage"
             continue
         fi
-
         allsetssetscount=$(echo "$allsetssets" | wc -l)
         echo "[i] Found $allsetssetscount set(s) on user sets page $allsetsnumcurpage"
-
         for (( allsetsnumcurset=1; allsetsnumcurset <= $allsetssetscount; allsetsnumcurset++ ))
         do
             allsetsseturl=$(echo "$allsetssets" | sed -n "$allsetsnumcurset"p)
-            echo "[i] Grabbing set $allsetsnumcurset page"
+            echo "*-------- Downloading set n°$allsetsnumcurset ----------*"
             downset "http://soundcloud.com$allsetsseturl"
+            echo "*-------- Set n°$allsetsnumcurset Downloaded -----------*"
         done
     done
 }
@@ -283,7 +284,7 @@ fi
 command -v recode &>/dev/null || { echo "[!] Recode needs to be installed."; exit 1; }
 command -v eyeD3 &>/dev/null || { echo "[!] eyeD3 needs to be installed to write tags into mp3 file."; echo "[!] The script will skip this part..."; writags=0; }
 
-soundurl=$(echo "$1" | sed 's-.*soundcloud.com/-http://soundcloud.com/-' | cut -d "?" -f 1)
+soundurl=$(echo "$1" | sed 's-.*soundcloud.com/-http://soundcloud.com/-' | cut -d "?" -f 1 | grep 'soundcloud.com')
 
 echo "[i] Using URL $soundurl"
 
