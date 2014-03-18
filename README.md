@@ -10,12 +10,13 @@ System requirements
 --------------
 * Unix like OS with a proper shell
 * URL (Highly recommended) or wget
-* Tools wich are preinstalled on linux (I don't know  for OS X) : `recode` ; `sed` ; `tail` ; `tr` ; `echo` ; `grep` ; `head` ; `cut` ; `sort` ; `uniq` .
+* Tools wich are preinstalled on linux (I don't know  for OS X) : `sed` ; `tail` ; `tr` ; `echo` ; `grep` ; `head` ; `cut` ; `sort` ; `uniq` .
 
 
 Required tools
 --------------
 * Update the package list : `sudo apt-get update`
+* Install Recode `sudo apt-get install recode`
 * Install eyeD3 `sudo apt-get install eyeD3`
 * Install cURL `sudo apt-get install curl`
 
@@ -29,11 +30,13 @@ Instructions
 
 Features
 --------------
-* Download all song of one user's page
-* Download all song of one song page
-* Download all song of one user's playlist page
-* Download all song of one user's list of playlist page
-* Download all song of one group page
+* Autodetect wich kind of download it is.
+* Download all song of an user's page
+* Download all song of asong page
+* Download all song of an user's playlist page
+* Download all song of an user's list of playlist page
+* Download all song of a group page
+* Download all song of an user's liked song
 * Set tags with eyeD3 (skip the tag if eyeD3 is not installed)
 * The script stop when he see one song that have already been downloaded
 * You can use it as a sync script as i do with my Raspberry PI, each night it launch the script with my users profile and if new song as been added it download them and stop when it encounter a song that is already downloaded ;).
@@ -44,6 +47,12 @@ Changelog
 * Replaced id3v2 with eyeD3 wich support image tag
 * Added image & genre tags support for each type 
 * Added support of playlist in an users page !
+
+don't know the date... :
+* Group page support.
+
+18/03/2014 :
+* User's like download support.
 
 More information
 --------------

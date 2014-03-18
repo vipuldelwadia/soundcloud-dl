@@ -63,6 +63,35 @@ function downsong() { #Done!
     echo ''
 }
 
+function downlike() {
+    artistnm=$(echo "$1" | cut -d '/' -f 4)
+    likeurl=$(echo "http://soundcloud.com/$artistnm")
+    echo "[i] Grabbing artists page"
+    if $curlinstalled; then
+        page=$(curl -L -s --user-agent 'Mozilla/5.0' $likeurl)
+    else
+        page=$(wget --max-redirect=1000 --trust-server-names -q -U 'Mozilla/5.0' $likeurl)
+    fi
+    clientID=$(echo "$page" | grep "clientID" | tr "," "\n" | grep "clientID" | cut -d '"' -f 4)
+    artistID=$(echo "$page" | tr "," "\n" | grep "trackOwnerId" | head -n 1 | cut -d ":" -f 2)
+    if $curlinstalled; then
+        likepage=$(curl -L -s --user-agent 'Mozilla/5.0' "http://api.soundcloud.com/users/$artistID/favorites?client_id=$clientID" | sed '1,2d' | grep "<permalink-url>" | sed '1d' | sed -n '1~2p')
+    else
+        likepage=$(wget --max-redirect=1000 --trust-server-names -q -U 'Mozilla/5.0' "http://api.soundcloud.com/users/$artistID/favorites?client_id=$clientID")
+    fi
+    songcount=$(echo "$likepage" | wc -l)
+    echo "[i] Found $songcount songs! (50 is max)"
+    for (( i=1; i <= $songcount; i++ ))
+    do
+        echo ''
+        echo "---------- Downloading Song n°$i ----------"
+        thisongurl=$(echo "$likepage" | sed -n "$i"p | cut -d ">" -f 2 | cut -d "<" -f 1)
+        echo "this is the like pageurl $thislikepage"
+        downsong "$thisongurl"
+        echo "----- Downloading Song n°$i finished ------"
+    done
+}
+
 function downallsongs() {
     # Grab Info
     url="$1"
@@ -76,9 +105,9 @@ function downallsongs() {
     artistID=$(echo "$page" | tr "," "\n" | grep "trackOwnerId" | head -n 1 | cut -d ":" -f 2) 
     echo "[i] Grabbing all song info"
     if $curlinstalled; then
-        songs=$(curl -s -L --user-agent 'Mozilla/5.0' "https://api.sndcdn.com/e1/users/$artistID/sounds?limit=256&offset=0&linked_partitioning=1&client_id=$clientID" | tr -d "\n" | sed 's/<stream-item>/\n/g' | sed '1d' )
+        songs=$(curl -s -L --user-agent 'Mozilla/5.0' "https://api.sndcdn.com/e1/users/$artistID/sounds?limit=256&offset=0&linked_partitioning=1&client_id=$clientID" | tr -d "\n" | sed 's/<\/stream-item>/\n/g' | sed '1d' )
     else 
-        songs=$(wget -q --max-redirect=1000 --trust-server-names -O- -U 'Mozilla/5.0' "https://api.sndcdn.com/e1/users/$artistID/sounds?limit=256&offset=0&linked_partitioning=1&client_id=$clientID" | tr -d "\n" | sed 's/<stream-item>/\n/g' | sed '1d')
+        songs=$(wget -q --max-redirect=1000 --trust-server-names -O- -U 'Mozilla/5.0' "https://api.sndcdn.com/e1/users/$artistID/sounds?limit=256&offset=0&linked_partitioning=1&client_id=$clientID" | tr -d "\n" | sed 's/<\/stream-item>/\n/g' | sed '1d')
     fi
     songcount=$(echo "$songs" | wc -l)
     echo "[i] Found $songcount songs! (200 is max)"
@@ -134,7 +163,11 @@ function downgroup() {
     fi
     groupid=$(echo "$groupage" | grep "html5-code-groups" | tr " " "\n" | grep "html5-code-groups-" | cut -d '"' -f 2 | sed '2d' | cut -d '-' -f 4)
     clientID=$(echo "$groupage" | grep "clientID" | tr "," "\n" | grep "clientID" | cut -d '"' -f 4)
-    trackspage=$(curl -L -s --user-agent 'Mozilla/5.0' "http://api.soundcloud.com/groups/$groupid/tracks.json?client_id=$clientID" | tr "}" "\n")
+    if $curlinstalled; then
+        trackspage=$(curl -L -s --user-agent 'Mozilla/5.0' "http://api.soundcloud.com/groups/$groupid/tracks.json?client_id=$clientID" | tr "}" "\n")
+    else
+        trackspage=$(wget --max-redirect=1000 --trust-server-names --progress=bar -U -O- 'Mozilla/5.0' "http://api.soundcloud.com/groups/$groupid/tracks.json?client_id=$clientID" | tr "}" "\n")
+    fi
     trackspage=$(echo "$trackspage" | tr "," "\n" | grep '"permalink_url":' | sed '1d' | sed -n '1~2p')
     songcount=$(echo "$trackspage" | wc -l)
     echo "[i] Found $songcount songs!"
@@ -290,6 +323,9 @@ if [[ "$(echo "$soundurl" | cut -d "/" -f 4)" == "" ]] ; then
 elif [[ "$(echo "$soundurl" | cut -d "/" -f 4)" == "groups" ]] ; then
     echo "[i] Detected download type : All song of the group"
     downgroup "$soundurl"
+elif [[ "$(echo "$soundurl" | cut -d "/" -f 5)" == "likes" ]] ; then
+    echo "[i] Detected download type : All of one user's like"
+    downlike "$soundurl"
 elif [[ "$(echo "$soundurl" | cut -d "/" -f 5)" == "" ]] ; then
     echo "[i] Detected download type : All of one user's songs"
     downallsongs "$soundurl"
