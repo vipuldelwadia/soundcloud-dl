@@ -75,7 +75,7 @@ function downlike() {
     clientID=$(echo "$page" | grep "clientID" | tr "," "\n" | grep "clientID" | cut -d '"' -f 4)
     artistID=$(echo "$page" | tr "," "\n" | grep "trackOwnerId" | head -n 1 | cut -d ":" -f 2)
     if $curlinstalled; then
-        likepage=$(curl -L -s --user-agent 'Mozilla/5.0' "http://api.soundcloud.com/users/$artistID/favorites?client_id=$clientID" | sed '1,2d' | grep "<permalink-url>" | sed '1d' | sed -n '1~2p')
+        likepage=$(curl -L -s --user-agent 'Mozilla/5.0' "http://api.soundcloud.com/users/$artistID/favorites?client_id=$clientID" | sed '1,2d' | grep "<permalink-url>" | sed '1d' | sed -n '1~2p' | sed '51d')
     else
         likepage=$(wget --max-redirect=1000 --trust-server-names -q -U 'Mozilla/5.0' "http://api.soundcloud.com/users/$artistID/favorites?client_id=$clientID")
     fi
@@ -204,7 +204,7 @@ function downset() {
         id=$(echo "$setsongs" | sed -n "$numcursong"p)
         title=$(echo -e "$page" | grep data-sc-track | grep $id | grep -oE 'rel=.nofollow.>[^<]*' | sed 's/rel="nofollow">//' | sed 's/\\u0026/\&/g' | recode html..u8)
         if [[ "$title" == "Play" ]] ; then
-        title=$(echo -e "$page" | grep $id | grep id | grep -oE "\"title\":\"[^\"]*" | sed 's/"title":"//' | sed 's/\\u0026/\&/g' | recode html..u8)
+            title=$(echo -e "$page" | grep $id | grep id | grep -oE "\"title\":\"[^\"]*" | sed 's/"title":"//' | sed 's/\\u0026/\&/g' | recode html..u8)
         fi
         artist=$(echo "$page" | grep -A3 $id | grep byArtist | cut -d"\"" -f2 | recode html..u8)
         filename=$(echo "$title".mp3 | tr '*/\?"<>|' '+       ' )      
@@ -216,9 +216,9 @@ function downset() {
         #----------settags-------#
         pageurl=$(echo "$page" | grep -A3 $id | grep url | cut -d"\"" -f2)
         if $curlinstalled; then
-        songpage=$(curl -s -L --user-agent 'Mozilla/5.0' "$pageurl")
+            songpage=$(curl -s -L --user-agent 'Mozilla/5.0' "$pageurl")
         else
-        songpage=$(wget --max-redirect=1000 --trust-server-names --progress=bar -U -O- 'Mozilla/5.0' "$pageurl")
+            songpage=$(wget --max-redirect=1000 --trust-server-names --progress=bar -U -O- 'Mozilla/5.0' "$pageurl")
         fi
         imageurl=$(echo "$songpage" | tr ">" "\n" | grep -A1 '<div class="artwork-download-link"' | cut -d '"' -f 2 | tr " " "\n" | grep 'http' | sed 's/original/t500x500/g' | sed 's/png/jpg/g' )
         genre=$(echo "$songpage" | tr ">" "\n" | grep -A1 '<span class="genre search-deprecation-notification" data="/tags/' | tr ' ' "\n" | grep '</span' | cut -d "<" -f 1 | recode html..u8)
