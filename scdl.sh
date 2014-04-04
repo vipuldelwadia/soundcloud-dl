@@ -86,7 +86,6 @@ function downlike() {
         echo ''
         echo "---------- Downloading Song n°$i ----------"
         thisongurl=$(echo "$likepage" | sed -n "$i"p | cut -d ">" -f 2 | cut -d "<" -f 1)
-        echo "this is the like pageurl $thislikepage"
         downsong "$thisongurl"
         echo "----- Downloading Song n°$i finished ------"
     done
